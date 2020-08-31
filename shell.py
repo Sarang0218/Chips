@@ -1,7 +1,6 @@
 import basic
-import tqdm
 from time import sleep
-
+import tqdm
 
 while True:
     text = input('chips > ')
@@ -19,3 +18,4 @@ while True:
             print(repr(result.elements[0]))
         else:
             print(repr(result))
+        

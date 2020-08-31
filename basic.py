@@ -1563,6 +1563,12 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_print.arg_names = ["value"]
 
+    def execute_greet(self, exec_ctx):
+        print(str(exec_ctx.symbol_table.get('value')))
+        ## DEBUG: Change later
+        return RTResult().success(Number.null)
+    execute_greet.arg_names = ["value"]
+
     def execute_print_ret(self, exec_ctx):
         return RTResult().success(String(str(exec_ctx.symbol_table.get('value'))))
 
@@ -1597,6 +1603,10 @@ class BuiltInFunction(BaseFunction):
         text = input()
         return RTResult().success(String(text))
     execute_input.arg_names = []
+    def execute_ask(self, exec_ctx):
+        text = input()
+        return RTResult().success(String(text))
+    execute_ask.arg_names = []
 
     def execute_input_int(self, exec_ctx):
         while True:
@@ -1701,9 +1711,11 @@ class BuiltInFunction(BaseFunction):
     execute_extend.arg_names = ["listA", "ListB"]
 
 BuiltInFunction.print = BuiltInFunction("print")
+BuiltInFunction.greet = BuiltInFunction("greet")
 BuiltInFunction.print_ret = BuiltInFunction("print_ret")
 BuiltInFunction.UI_print = BuiltInFunction("UI_print")
 BuiltInFunction.input = BuiltInFunction("input")
+BuiltInFunction.ask = BuiltInFunction("ask")
 BuiltInFunction.input_int = BuiltInFunction("input_int")
 BuiltInFunction.clear = BuiltInFunction("clear")
 BuiltInFunction.is_number = BuiltInFunction("is_number")
@@ -1964,9 +1976,11 @@ global_symbol_table.set("true", Number.true)
 global_symbol_table.set("false", Number.false)
 global_symbol_table.set("math_pi", Number.math_pi)
 global_symbol_table.set("print", BuiltInFunction.print)
+global_symbol_table.set("greet", BuiltInFunction.greet)
 global_symbol_table.set("print_ret", BuiltInFunction.print_ret)
 global_symbol_table.set("UI_print", BuiltInFunction.UI_print)
 global_symbol_table.set("input", BuiltInFunction.input)
+global_symbol_table.set("ask", BuiltInFunction.ask)
 global_symbol_table.set("input_int", BuiltInFunction.input_int)
 global_symbol_table.set("clear", BuiltInFunction.clear)
 global_symbol_table.set("is_number", BuiltInFunction.is_number)
