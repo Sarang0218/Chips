@@ -429,7 +429,7 @@ class ForNode:
         self.pos_end = self.body_node.pos_end
 
 class WhileNode:
-    def __init__(self, condition_node, body_node):
+    def __init__(self, condition_node, body_node, should_return_null):
         self.condition_node = condition_node
         self.body_node = body_node
 
@@ -664,7 +664,7 @@ class Parser:
         cases.append((condition, statements, True))
 
         if self.current_tok.matches(TT_KEYWORD, 'end'):
-          res.register_advancements()
+          res.register_advancement()
           self.advance()
 
         else:
