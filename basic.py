@@ -1,7 +1,7 @@
 from strings_with_arrows import *
 
 import string
-import time
+
 import os
 import math
 import tkinter as tk
@@ -9,7 +9,7 @@ import tkinter as tk
 DIGITS = '0123456789'
 LETTERS = string.ascii_letters
 LETTERS_DIGITS = LETTERS + DIGITS
-title = ""
+
 
 class Error:
     def __init__(self, pos_start, pos_end, error_name, details):
@@ -661,7 +661,7 @@ class Parser:
 
         statements = res.register(self.statements())
         if res.error: res
-        cases.append((conditions, statements, True))
+        cases.append((condition, statements, True))
 
         if self.current_tok.matches(TT_KEYWORD, 'end'):
           res.register_advancements()
