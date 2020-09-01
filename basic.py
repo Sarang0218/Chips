@@ -938,7 +938,7 @@ class Parser:
               True
           ))
 
-        if self.current_tok.type != TT_NEWLINE:
+        if self.current_tok.type != TokenType_NEWLINE:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
             f"Expected '->' or NEWLINE"
@@ -950,7 +950,7 @@ class Parser:
         body = res.register(self.statements())
         if res.error: return res
 
-        if not self.current_tok.matches(TT_KEYWORD, 'END'):
+        if not self.current_tok.matches(TokenType_KEYWORD, 'END'):
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
             f"Expected 'END'"
@@ -1659,7 +1659,7 @@ class BuiltInFunction(BaseFunction):
     method_name = f'execute_{self.name}'
     method = getattr(self, method_name, self.no_visit_method)
 
-    
+    res.register(self.check_and_populate_args(method.arg_names, args, exec_ctx))
     if res.should_return(): return res
 
     return_value = res.register(method(exec_ctx))
@@ -1724,7 +1724,6 @@ class BuiltInFunction(BaseFunction):
       text = input()
       return RTResult().success(String(text))
   execute_input.arg_names = []
-
   def execute_ask(self, exec_ctx):
       text = input()
       return RTResult().success(String(text))
@@ -1807,7 +1806,6 @@ class BuiltInFunction(BaseFunction):
                 exec_ctx
             ))
         return RTResult.success(element)
-        
   execute_pop.arg_names = ['list', 'index']
 
   def execute_extend(self, exec_ctx):
@@ -1834,19 +1832,24 @@ class BuiltInFunction(BaseFunction):
   execute_extend.arg_names = ["listA", "ListB"]
 
   def execute_len(self, exec_ctx):
-    list_ = exec_ctx.symbol_table.get("list")
+    list_ = exec_ctx
 
     if not isinstance(list_, List):
-      return RTResult().failure(RTError(self.pos_start, self.pos_end, "Argument must be list", exec_ctx))
+          return RTResult().failure(RTError(
+            self.pos_start, self.pos_end,
+            "Argument must be list",
+            exec_ctx
+        ))
 
-    return RTResult.success(Number(len(list_.elements)))
+    return RTResult().success(Number(len(list_.elements)))
 
   execute_len.arg_names = ["list"]
+
 
   def execute_run(self, exec_ctx):
     fn = exec_ctx.symbol_table.get("fn")
 
-    
+    print(fn)
 
     if not isinstance(fn, String):
       return RTResult().failure(RTError(self.pos_start, self.pos_end, "Argument must be string", exec_ctx))
@@ -1865,7 +1868,7 @@ class BuiltInFunction(BaseFunction):
     if error:
       return RTResult().failure(RTError(self.pos_start, self.pos_end, f"Failed to load script \"{fn}\"\n" + error.as_string(), exec_ctx))
 
-    return RTResult().success(Number.null)
+    return RTResult.success(Number.null)
 
   execute_run.arg_names = ["fn"]
 
@@ -1883,9 +1886,12 @@ BuiltInFunction.is_list = BuiltInFunction("is_list")
 BuiltInFunction.is_function = BuiltInFunction("is_function")
 BuiltInFunction.append = BuiltInFunction("append")
 BuiltInFunction.pop = BuiltInFunction("pop")
+BuiltInFunction.extend = BuiltInFunction("extend")
 BuiltInFunction.len = BuiltInFunction("len")
 BuiltInFunction.run = BuiltInFunction("run")
-BuiltInFunction.extend = BuiltInFunction("extend")
+
+
+
 
 
 
