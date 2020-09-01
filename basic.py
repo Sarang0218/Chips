@@ -118,13 +118,13 @@ KEYWORDS = [
     'if',
     'elif',
     'else',
-    '{',
+    'then',
     'for',
     'to',
     'step',
     'while',
     'func',
-    '}',
+    end,
     'return',
     'continue',
     'break'
@@ -632,13 +632,13 @@ class Parser:
         if res.error: return res
         else_case = (statements, True)
 
-        if self.current_tok.matches(TokenType_KEYWORD, '}'):
+        if self.current_tok.matches(TokenType_KEYWORD, end):
           res.register_advancement()
           self.advance()
         else:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            "Expected '}'"
+            "Expected end"
           ))
       else:
         expr = res.register(self.expr())
@@ -679,10 +679,10 @@ class Parser:
       condition = res.register(self.expr())
       if res.error: return res
 
-      if not self.current_tok.matches(TokenType_KEYWORD, '{'):
+      if not self.current_tok.matches(TokenType_KEYWORD, then):
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          "Expected '{'"
+          "Expected then"
         ))
 
       res.register_advancement()
@@ -696,7 +696,7 @@ class Parser:
         if res.error: res
         cases.append((condition, statements, True))
 
-        if self.current_tok.matches(TokenType_KEYWORD, '}'):
+        if self.current_tok.matches(TokenType_KEYWORD, end):
           res.register_advancement()
           self.advance()
 
@@ -774,10 +774,10 @@ class Parser:
         else:
             step_value = None
 
-        if not self.current_tok.matches(TokenType_KEYWORD, '{'):
+        if not self.current_tok.matches(TokenType_KEYWORD, then):
             return res.failure(InvalidSyntaxError(
                 self.current_tok.pos_start, self.current_tok.pos_end,
-                "Expected '{'"
+                "Expected then"
 			      ))
 
         res.register_advancement()
@@ -790,10 +790,10 @@ class Parser:
           body = res.register(self.statements())
           if res.error: return res
 
-          if not self.current_tok.matches(TokenType_KEYWORD, '}'):
+          if not self.current_tok.matches(TokenType_KEYWORD, end):
             return res.failure(InvalidSyntaxError(
               self.current_tok.pos_start, self.current_tok.pos_end,
-              f"Expected '}'"
+              "Expected end"
             ))
 
           res.register_advancement()
@@ -822,10 +822,10 @@ class Parser:
         condition = res.register(self.expr())
         if res.error: return res
 
-        if not self.current_tok.matches(TokenType_KEYWORD, '{'):
+        if not self.current_tok.matches(TokenType_KEYWORD, then):
             return res.failure(InvalidSyntaxError(
                 self.current_tok.pos_start, self.current_tok.pos_end,
-                "Expected '{'"
+                "Expected then"
             ))
 
         if self.current_tok.type == TokenType_NEWLINE:
@@ -835,10 +835,10 @@ class Parser:
           body = res.register(self.statements())
           if res.error: return res
 
-          if not self.current_tok.matches(TokenType_KEYWORD, '}'):
+          if not self.current_tok.matches(TokenType_KEYWORD, end):
             return res.failure(InvalidSyntaxError(
               self.current_tok.pos_start, self.current_tok.pos_end,
-              f"Expected '}'"
+              "Expected end"
             ))
 
           res.register_advancement()
@@ -938,7 +938,7 @@ class Parser:
               True
           ))
 
-        if self.current_tok.type != TT_NEWLINE:
+        if self.current_tok.type != TokenType_NEWLINE:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
             f"Expected '->' or NEWLINE"
@@ -950,10 +950,10 @@ class Parser:
         body = res.register(self.statements())
         if res.error: return res
 
-        if not self.current_tok.matches(TT_KEYWORD, '}'):
+        if not self.current_tok.matches(TokenType_KEYWORD, end):
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            f"Expected '}'"
+            "Expected end"
           ))
 
         res.register_advancement()
