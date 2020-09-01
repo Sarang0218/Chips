@@ -30,5 +30,8 @@ New libraries _will_ be developed by @DarkShardGamer
 ----
 We used help from CodePulse's tutorials to create this language.
 This project was also imported from _my_(From Sarang0218 account) old gitHub repo; This is an upgraded version of Sarang, which is one of my programming language _which I created_.
+During this Hackathon, we added Functions, Builtin Functions, Multiline support, and loops to our old language.
+The project was renamed to chips because I liked potato chips.
 We also learned a _LOT_ from the Crafting Interpreters book.
 
+Documentation by @SarangPark
