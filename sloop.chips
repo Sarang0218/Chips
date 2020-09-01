@@ -1,9 +1,0 @@
-#sloop
-while true {
-  value a = input()
-  if a == "sloop" {
-    break
-  }
-  print("Slooop")
-  continue
-}

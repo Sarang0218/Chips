@@ -1,0 +1,12 @@
+# This is a very useful piece of software
+
+print("HI")
+text = ask()
+
+
+func hello(person)
+  reply = "Hello, " + person
+  greet(reply)
+if text == "Hello" then 
+
+
